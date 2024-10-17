@@ -1,7 +1,7 @@
 {
   "name": "movie-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "![logo](https://user-images.githubusercontent.com/44912347/202296600-c5f247d6-9616-49db-88f0-38433429d781.jpg)",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,5 +18,13 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1"
-  }
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "express-validator": "^7.2.0",
+    "nodemon": "^3.1.7",
+    "sequelize": "^6.37.4",
+    "sqlite3": "^5.1.7"
+  },
+  "keywords": []
 }
