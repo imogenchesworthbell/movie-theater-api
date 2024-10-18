@@ -4,7 +4,7 @@ const showRouter = require("../routes/shows")
 const userRouter = require("../routes/users")
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use("/shows", showRouter);
 app.use("/users", userRouter);
 

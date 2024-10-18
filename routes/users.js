@@ -66,7 +66,22 @@ userRouter.delete("/:id", async (request, response) => {
 
 //POST - Use server-side validation in your routes to ensure that:
 //The username must be an email address hint
-userRouter.post("/", async (request, response) => {});
+
+userRouter.post("/",
+    [
+        check("username").not().isEmpty().isEmail().withMessage("email is required for your username."),
+        check("password").not().isEmpty().trim().withMessage("A password is required.")
+    ]
+, async (request, response) => {
+    const errors = validationResult(request)
+    if(!errors.isEmpty()){
+        response.json({error: errors.array()})
+    }else{
+    const newUser = await User.create(request.body);
+    const userAdded = await User.findAll({})
+    response.json(userAdded)
+    }
+});
 
 
 
