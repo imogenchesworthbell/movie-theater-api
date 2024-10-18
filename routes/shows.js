@@ -61,8 +61,14 @@ showRouter.delete("/:id", async (request, response) => {
 });
 
 // GET shows of a particular genre (genre in req.query)
+//Method from Plenary ...
 showRouter.get("/:genre", async (request, response) => {
-    
+    const specificGenre = await Show.findAll({
+      where: {
+        genre: request.params.genre
+      }
+    })
+    response.json(specificGenre) 
 });
 
 //POST - Use server-side validation in your routes to ensure that:
