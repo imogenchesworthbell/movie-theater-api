@@ -33,16 +33,25 @@ showRouter.get("/:id/users", async (request, response) => {
 
 //PUT - update 1 show
 showRouter.put("/:id", async (request, response) => {
-    const updatedShows = await Show.update(request.body, {where: {id: request.params.id}});
-    const shows = await Show.findAll()
-    response.json(shows);
-})
+  const updatedShows = await Show.update(request.body, {
+    where: { id: request.params.id },
+  });
+  const shows = await Show.findAll();
+  response.json(shows);
+});
 
 // PUT - update the available property of a show
 
 showRouter.put("/:id/available", async (request, response) => {
-    
-})
+  const show = await Show.findByPk(request.params.id);
+  if (show) {
+    show.available = request.body.available;
+    await show.save();
+    response.json({ message: "Show availability updated", show });
+  } else {
+    response.json({ message: "Show not found" });
+  }
+});
 
 // DELETE a show
 showRouter.delete("/:id", async (request, response) => {
@@ -53,28 +62,38 @@ showRouter.delete("/:id", async (request, response) => {
 
 // GET shows of a particular genre (genre in req.query)
 showRouter.get("/:genre", async (request, response) => {
-
+    
 });
 
 //POST - Use server-side validation in your routes to ensure that:
 //The title of a show must be a maximum of 25 characters
-showRouter.post("/", 
-        [
-            check("title").not().isEmpty().withMessage("Title is required.").isLength({max: 25}).withMessage("Your title is too long."),
-            check("genre").not().isEmpty().trim().withMessage("A genre is required."),
-            check("available").not().isEmpty().withMessage("Availability is required.").isBoolean().withMessage("Availability must be a boolean.")
-        ]
-    , async (request, response) => {
-        const errors = validationResult(request)
-        if(!errors.isEmpty()){
-            response.json({error: errors.array()})
-        }else{
-        const newShow = await Show.create(request.body);
-        const showAdded = await Show.findAll({})
-        response.json(showAdded)
-        }
-    
-});
-
+showRouter.post(
+  "/",
+  [
+    check("title")
+      .not()
+      .isEmpty()
+      .withMessage("Title is required.")
+      .isLength({ max: 25 })
+      .withMessage("Your title is too long."),
+    check("genre").not().isEmpty().trim().withMessage("A genre is required."),
+    check("available")
+      .not()
+      .isEmpty()
+      .withMessage("Availability is required.")
+      .isBoolean()
+      .withMessage("Availability must be a boolean."),
+  ],
+  async (request, response) => {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      response.json({ error: errors.array() });
+    } else {
+      const newShow = await Show.create(request.body);
+      const showAdded = await Show.findAll({});
+      response.json(showAdded);
+    }
+  }
+);
 
 module.exports = showRouter;
